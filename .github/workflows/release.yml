@@ -1,8 +1,5 @@
 name: Release
 
-# Publica binários + checksums.txt quando uma tag vX.Y.Z é enviada, ou pelo botão
-# "Run workflow" (Actions → Release) informando a versão: aí o próprio workflow cria a tag
-# no commit escolhido. O comando `likedsorter update` baixa estes arquivos e confere o SHA-256.
 on:
   push:
     tags: ["v*.*.*"]

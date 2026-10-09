@@ -19,7 +19,7 @@ import (
 )
 
 // DefaultRepo é o repositório das releases.
-const DefaultRepo = "ikauedeveloper/likedsorter"
+const DefaultRepo = "IKauedev/likedsorter-spotify"
 
 const maxBinary = 200 << 20 // 200 MiB
 

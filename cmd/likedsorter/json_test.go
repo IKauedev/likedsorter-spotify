@@ -47,7 +47,7 @@ func TestWithJSONTextModeAndErrors(t *testing.T) {
 	}
 	out.Reset()
 	boom := errors.New("boom")
-	if err := withJSON([]string{"--json"}, &out, func([]string, io.Writer) (any, error) { return nil, boom }); err != boom || out.Len() != 0 {
+	if err := withJSON([]string{"--json"}, &out, func([]string, io.Writer) (any, error) { return nil, boom }); !errors.Is(err, boom) || out.Len() != 0 {
 		t.Errorf("erro deveria propagar sem JSON: err=%v out=%q", err, out.String())
 	}
 }

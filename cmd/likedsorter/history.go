@@ -143,7 +143,7 @@ func runHistory(ctx context.Context, args []string, out io.Writer) error {
 		}
 		if _, err := os.Stat(path); err != nil {
 			fmt.Fprintln(out, "Não há histórico local.")
-			return nil
+			return nil //nolint:nilerr // sem arquivo: avisa e segue
 		}
 		if ok, err := confirmYes(out, "Apagar o histórico local de reproduções ("+path+")?", *yes); err != nil {
 			return err

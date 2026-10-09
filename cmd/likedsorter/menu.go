@@ -226,13 +226,13 @@ func (m *menu) loop() error {
 	fmt.Fprint(m.out, banner(m.color))
 	for {
 		if m.ctx.Err() != nil {
-			return nil
+			return nil //nolint:nilerr // erro já mostrado ao usuário; segue normalmente
 		}
 		m.header()
 		fmt.Fprint(m.out, "\n> ")
 		s, err := m.readLine()
 		if err != nil {
-			if err == io.EOF {
+			if errors.Is(err, io.EOF) {
 				fmt.Fprintln(m.out)
 				return nil
 			}
@@ -240,7 +240,7 @@ func (m *menu) loop() error {
 		}
 		done, err := m.dispatch(strings.ToLower(s))
 		if err != nil {
-			if err == io.EOF {
+			if errors.Is(err, io.EOF) {
 				return nil
 			}
 			return err
@@ -329,11 +329,11 @@ func (m *menu) setup() error {
 	path, err := config.EnvFilePath()
 	if err != nil {
 		fmt.Fprintln(m.out, m.paint("31", "erro: "+err.Error()))
-		return nil
+		return nil //nolint:nilerr // erro já mostrado ao usuário; segue normalmente
 	}
 	fmt.Fprintln(m.out)
 	if err := interactiveSetup(path, m.ask, m.out); err != nil {
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			return err
 		}
 		fmt.Fprintln(m.out, m.paint("31", "erro: "+err.Error()))
@@ -466,7 +466,7 @@ func (m *menu) free() error {
 	args, err := splitLine(s)
 	if err != nil {
 		fmt.Fprintln(m.out, m.paint("31", "erro: "+err.Error()))
-		return nil
+		return nil //nolint:nilerr // erro já mostrado ao usuário; segue normalmente
 	}
 	if len(args) == 0 {
 		return nil

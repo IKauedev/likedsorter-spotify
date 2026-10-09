@@ -135,6 +135,7 @@ Compilar a partir do código-fonte (exige Go 1.22+):
   go build -trimpath -ldflags "-s -w" -o likedsorter.exe ./cmd/likedsorter
 `
 
+//nolint:gosec // G101: texto de ajuda, não é credencial
 const helpSecrets = `Credenciais (segredos) do Spotify
 
 O programa precisa do "Client ID" de um app SEU no Spotify. Usa OAuth com PKCE:

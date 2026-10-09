@@ -12,8 +12,8 @@
 config.local.yaml
 token.json
 *.token
-state/
-backups/
+/state/
+/backups/
 *.db
 *.sqlite
 

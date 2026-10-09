@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -110,7 +111,7 @@ func setupShow(path string, out io.Writer, asJSON bool) error {
 	fmt.Fprintf(out, "Arquivo: %s\n", path)
 	if _, err := os.Stat(path); err != nil {
 		fmt.Fprintln(out, "(ainda não existe; rode `likedsorter setup`)")
-		return nil
+		return nil //nolint:nilerr // sem arquivo: avisa e segue
 	}
 	mask := func(v string) string {
 		switch {
@@ -191,13 +192,13 @@ func saveSetup(path string, v map[string]string, out io.Writer) error {
 	} else if _, asked := v[config.EnvClientID]; !asked {
 		// só opcionais (ex.: --ai-provider, --lastfm-key): o Client ID não está em jogo
 	} else if cur, _ := config.ReadEnvFile(path); cur[config.EnvClientID] == "" || cur[config.EnvClientID] == "COLE_SEU_CLIENT_ID_AQUI" {
-		return fmt.Errorf("Client ID obrigatório (veja `likedsorter help segredos`)")
+		return errors.New("o Client ID é obrigatório (veja `likedsorter help segredos`)")
 	} else {
 		delete(v, config.EnvClientID) // mantém o existente
 	}
 	if r := v[config.EnvRedirectURI]; r != "" {
 		if err := config.ValidateRedirectURI(r); err != nil {
-			return fmt.Errorf("Redirect URI inválido: %w", err)
+			return fmt.Errorf("o Redirect URI é inválido: %w", err)
 		}
 	}
 	// Só grava o que foi informado; vazio em chave opcional remove a linha apenas se veio da pergunta.

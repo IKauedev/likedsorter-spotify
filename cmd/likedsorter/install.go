@@ -133,7 +133,7 @@ func sameFile(a, b string) bool {
 
 // copyExecutable copia src para dst via arquivo temporário + rename.
 func copyExecutable(src, dst string) error {
-	if err := os.MkdirAll(filepath.Dir(dst), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(dst), 0o755); err != nil { //nolint:gosec // G301: pasta de binários no PATH
 		return err
 	}
 	in, err := os.Open(src)
@@ -153,7 +153,7 @@ func copyExecutable(src, dst string) error {
 	if err := tmp.Close(); err != nil {
 		return err
 	}
-	if err := os.Chmod(tmp.Name(), 0o755); err != nil {
+	if err := os.Chmod(tmp.Name(), 0o755); err != nil { //nolint:gosec // G302: executável precisa ser executável
 		return err
 	}
 	return os.Rename(tmp.Name(), dst)

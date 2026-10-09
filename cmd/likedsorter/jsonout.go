@@ -5,7 +5,6 @@ import (
 	"io"
 	"os"
 	"slices"
-	"strings"
 )
 
 // writeJSON imprime v indentado (saída padrão para scripts).
@@ -72,13 +71,6 @@ func paint(code, s string) string {
 		return s
 	}
 	return "\x1b[" + code + "m" + s + "\x1b[0m"
-}
-
-func joinOr(s []string, empty string) string {
-	if len(s) == 0 {
-		return empty
-	}
-	return strings.Join(s, ", ")
 }
 
 func errWriter() io.Writer { return os.Stderr }

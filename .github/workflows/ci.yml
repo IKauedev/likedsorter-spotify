@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
     tags: ["v*"]
   pull_request:
 
@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version: "1.25.x" # o go.mod continua exigindo só 1.22; 1.22 gera binários que o macOS atual recusa (LC_UUID)
       - name: gofmt
         run: test -z "$(gofmt -l .)" || { echo "arquivos sem gofmt:"; gofmt -l .; exit 1; }
       - name: go mod tidy
@@ -46,8 +46,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version: "1.25.x" # o go.mod continua exigindo só 1.22; 1.22 gera binários que o macOS atual recusa (LC_UUID)
       - name: go test -race
+        shell: bash # no Windows o PowerShell quebra -coverprofile=coverage.txt
         run: go test -race -count=1 -coverprofile=coverage.txt ./...
       - name: Cobertura mínima (grouping, planner, cache >= 70%)
         if: matrix.os == 'ubuntu-latest'
@@ -85,7 +86,7 @@ jobs:
           fetch-depth: 0 # para git describe (versão)
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version: "1.25.x" # o go.mod continua exigindo só 1.22; 1.22 gera binários que o macOS atual recusa (LC_UUID)
       - name: Compilar
         run: |
           ext=""; [ "$GOOS" = "windows" ] && ext=".exe"

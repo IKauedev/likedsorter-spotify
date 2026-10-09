@@ -214,7 +214,7 @@ func (u *Updater) Download(ctx context.Context, r *Release, goos, goarch, dest s
 		os.Remove(tmp.Name())
 		return "", err
 	}
-	if err := os.Chmod(tmp.Name(), 0o755); err != nil {
+	if err := os.Chmod(tmp.Name(), 0o755); err != nil { //nolint:gosec // G302: executável precisa ser executável
 		os.Remove(tmp.Name())
 		return "", err
 	}

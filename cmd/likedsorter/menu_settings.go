@@ -103,7 +103,7 @@ func (m *menu) editEnv(title string, fields []envField) error {
 	path, err := config.EnvFilePath()
 	if err != nil {
 		fmt.Fprintln(m.out, m.paint("31", "erro: "+err.Error()))
-		return nil
+		return nil //nolint:nilerr // erro já mostrado ao usuário; segue normalmente
 	}
 	for {
 		cur, _ := config.ReadEnvFile(path)
@@ -188,14 +188,14 @@ func (m *menu) editPrefs() error {
 			p, err := config.SettingsPath()
 			if err != nil {
 				fmt.Fprintln(m.out, m.paint("31", "erro: "+err.Error()))
-				return nil
+				return nil //nolint:nilerr // erro já mostrado ao usuário; segue normalmente
 			}
 			path = p
 		}
 		_, entries, err := config.LoadSettings(m.g.configPath)
 		if err != nil {
 			fmt.Fprintln(m.out, m.paint("31", "erro: "+err.Error()))
-			return nil
+			return nil //nolint:nilerr // erro já mostrado ao usuário; segue normalmente
 		}
 		fmt.Fprintln(m.out)
 		tw := tabwriter.NewWriter(m.out, 0, 0, 2, ' ', 0)

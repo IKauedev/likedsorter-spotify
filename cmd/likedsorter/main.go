@@ -171,7 +171,7 @@ func run(ctx context.Context, args []string, out io.Writer) error {
 	case "auto":
 		return runAuto(ctx, args[1:], out)
 	case "schedule":
-		return runSchedule(args[1:], out)
+		return runSchedule(ctx, args[1:], out)
 	case "update":
 		return runUpdate(ctx, args[1:], out)
 	case "completion":

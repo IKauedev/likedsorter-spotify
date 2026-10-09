@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version: "1.25.x" # o go.mod continua exigindo só 1.22; 1.22 gera binários que o macOS atual recusa (LC_UUID)
       - name: Testes
         run: go test -count=1 ./...
       - name: Compilar todas as plataformas

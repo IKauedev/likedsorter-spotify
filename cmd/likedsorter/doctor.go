@@ -125,7 +125,7 @@ func runChecks(ctx context.Context, offline bool) []check {
 	if rerr != nil {
 		add("Redirect URI", stFail, rerr.Error(), "rode `likedsorter setup` e use http://127.0.0.1:8888/callback")
 	} else {
-		ln, lerr := net.Listen("tcp", addr)
+		ln, lerr := (&net.ListenConfig{}).Listen(ctx, "tcp", addr)
 		if lerr != nil {
 			add("Redirect URI", stWarn, cfg.RedirectURI+": porta ocupada agora ("+lerr.Error()+")", "feche o programa que usa a porta antes do `auth login`, ou troque a porta no setup E no Dashboard")
 		} else {

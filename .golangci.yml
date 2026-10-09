@@ -24,6 +24,7 @@ linters:
       excludes:
         - G104 # coberto pelo errcheck
         - G304 # ler arquivos em caminhos de config/cache/--flag do próprio usuário é a função da CLI
+        - G703 # idem (taint de caminho): os caminhos vêm do próprio usuário
   exclusions:
     presets:
       - comments

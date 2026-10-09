@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -55,7 +56,7 @@ func TestFindPlaylist(t *testing.T) {
 	if _, err := findPlaylist(pls, "Treino"); err == nil || !strings.Contains(err.Error(), "2 playlists") {
 		t.Errorf("ambígua deveria falhar, err=%v", err)
 	}
-	if _, err := findPlaylist(pls, "nada"); err != errNoPlaylist {
+	if _, err := findPlaylist(pls, "nada"); !errors.Is(err, errNoPlaylist) {
 		t.Errorf("inexistente: %v", err)
 	}
 }

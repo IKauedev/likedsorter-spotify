@@ -11,7 +11,7 @@ func (m *menu) addSongs() error {
 	if err != nil {
 		fmt.Fprintln(m.out, m.paint("31", "erro: "+err.Error()))
 		m.pause()
-		return nil
+		return nil //nolint:nilerr // erro já mostrado ao usuário; segue normalmente
 	}
 	to, err := m.ask("Nome (ou link) da playlist de destino", "")
 	if err != nil {

@@ -93,7 +93,7 @@ func defaultLogFile() string {
 }
 
 // runSchedule: schedule install | status | remove (Agendador de Tarefas no Windows; cron nos demais).
-func runSchedule(args []string, out io.Writer) error {
+func runSchedule(ctx context.Context, args []string, out io.Writer) error {
 	const uso = "uso: likedsorter schedule install [--every hourly|daily|weekly] [--at HH:MM] [-- flags do apply] | status | remove"
 	if len(args) == 0 {
 		return errors.New(uso)
@@ -145,7 +145,7 @@ func runSchedule(args []string, out io.Writer) error {
 		}
 		a := append([]string{"/Create", "/F", "/TN", taskName}, sc...)
 		a = append(a, "/TR", cmdline)
-		if b, err := exec.Command("schtasks", a...).CombinedOutput(); err != nil {
+		if b, err := exec.CommandContext(ctx, "schtasks", a...).CombinedOutput(); err != nil { //nolint:gosec // G204: argumentos fixos + caminho do próprio executável
 			return fmt.Errorf("schtasks: %w: %s", err, strings.TrimSpace(string(b)))
 		}
 		fmt.Fprintf(out, "Tarefa \"%s\" criada (%s%s).\n", taskName, *every, map[bool]string{true: "", false: " às " + *at}[*every == "hourly"])
@@ -159,7 +159,7 @@ func runSchedule(args []string, out io.Writer) error {
 			fmt.Fprintln(out, "Veja com: crontab -l | grep likedsorter")
 			return nil
 		}
-		b, err := exec.Command("schtasks", "/Query", "/TN", taskName, "/FO", "LIST", "/V").CombinedOutput()
+		b, err := exec.CommandContext(ctx, "schtasks", "/Query", "/TN", taskName, "/FO", "LIST", "/V").CombinedOutput()
 		if err != nil {
 			if asJSON {
 				return writeJSON(out, map[string]any{"scheduled": false})
@@ -185,7 +185,7 @@ func runSchedule(args []string, out io.Writer) error {
 			fmt.Fprintln(out, "Remova a linha do likedsorter com: crontab -e")
 			return nil
 		}
-		if b, err := exec.Command("schtasks", "/Delete", "/F", "/TN", taskName).CombinedOutput(); err != nil {
+		if b, err := exec.CommandContext(ctx, "schtasks", "/Delete", "/F", "/TN", taskName).CombinedOutput(); err != nil {
 			return fmt.Errorf("schtasks: %w: %s", err, strings.TrimSpace(string(b)))
 		}
 		fmt.Fprintln(out, "Tarefa agendada removida.")

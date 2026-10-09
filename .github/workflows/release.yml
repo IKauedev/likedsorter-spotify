@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version: "1.25.x" # o go.mod continua exigindo só 1.22; 1.22 gera binários que o macOS atual recusa (LC_UUID)
       - name: Validar versão

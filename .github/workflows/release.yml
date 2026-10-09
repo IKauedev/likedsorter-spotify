@@ -1,10 +1,16 @@
 name: Release
 
-# Publica binários + checksums.txt quando uma tag vX.Y.Z é enviada.
-# O comando `likedsorter update` baixa estes arquivos e confere o SHA-256.
+# Publica binários + checksums.txt quando uma tag vX.Y.Z é enviada, ou pelo botão
+# "Run workflow" (Actions → Release) informando a versão: aí o próprio workflow cria a tag
+# no commit escolhido. O comando `likedsorter update` baixa estes arquivos e confere o SHA-256.
 on:
   push:
     tags: ["v*.*.*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Versão a publicar (ex.: v1.0.0) — a tag é criada no commit do branch escolhido"
+        required: true
 
 permissions:
   contents: write
@@ -15,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CGO_ENABLED: "0"
+      # Tag da release: a enviada (push) ou a informada no disparo manual.
+      TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,11 +30,14 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: "1.25.x" # o go.mod continua exigindo só 1.22; 1.22 gera binários que o macOS atual recusa (LC_UUID)
+      - name: Validar versão
+        run: |
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "versão inválida: $TAG (use vX.Y.Z)"; exit 1; }
       - name: Testes
         run: go test -count=1 ./...
       - name: Compilar todas as plataformas
         run: |
-          version="${GITHUB_REF_NAME}"
+          version="${TAG}"
           mkdir -p dist
           for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64; do
             os="${target%/*}"; arch="${target#*/}"
@@ -38,8 +49,8 @@ jobs:
           (cd dist && sha256sum likedsorter_* > checksums.txt && cat checksums.txt)
       - name: Manifest do Scoop (instalação com um comando no Windows)
         run: |
-          version="${GITHUB_REF_NAME#v}"
-          base="https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}"
+          version="${TAG#v}"
+          base="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}"
           h64="$(grep ' likedsorter_windows_amd64.exe$' dist/checksums.txt | cut -d' ' -f1)"
           harm="$(grep ' likedsorter_windows_arm64.exe$' dist/checksums.txt | cut -d' ' -f1)"
           cat > dist/likedsorter.json <<EOF
@@ -62,5 +73,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" dist/* \
-            --title "${GITHUB_REF_NAME}" --generate-notes
+          # --target só vale quando a tag ainda não existe (disparo manual): cria no commit atual.
+          gh release create "${TAG}" dist/* \
+            --title "${TAG}" --generate-notes --target "${GITHUB_SHA}"

@@ -25,7 +25,7 @@ const (
 	EnvAIModel     = "AI_MODEL"
 	EnvAIBaseURL   = "AI_BASE_URL"
 
-	DefaultContact = "https://github.com/ikauedeveloper/likedsorter"
+	DefaultContact = "https://github.com/IKauedev/likedsorter-spotify"
 
 	DefaultRedirectURI = "http://127.0.0.1:8888/callback"
 	placeholderID      = "COLE_SEU_CLIENT_ID_AQUI"

@@ -1,0 +1,15 @@
+likedsorter | plano (dry-run, nada foi alterado) | estratégia: macro-genre | 2026-10-08 21:30
+AVISO: playlists existentes não foram consultadas (--skip-existing); tudo aparece como "criar".
+
+ESTATÍSTICAS
+  Curtidas no Spotify: 2105 | úteis: 2090 (ignoradas: 3 locais, 2 indisponíveis, 0 sem ID, 10 duplicadas)
+  Playlists: 4 | faixas atribuídas: 2090 | ignoradas por grupo pequeno: 0
+  Faixas sem gênero: n/d (gêneros não carregados nesta estratégia)
+  Tamanho das playlists: 5-9: 1 | 100-499: 2 | 1000+: 1
+  Top artistas: Racionais MC's (40), Djavan (31)
+
+PLANO
+AÇÃO   PLAYLIST         DESEJADAS  MANTER  ADICIONAR  REMOVER
+criar  Curtidas • Rock  3          0       3          0
+
+Resumo: 1 a criar, 0 a atualizar, 0 a manter, 0 órfãs | +3 faixas, -0 faixas (remoção só com --allow-remove)

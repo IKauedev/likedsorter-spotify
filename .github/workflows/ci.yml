@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: gofmt
+        run: test -z "$(gofmt -l .)" || { echo "arquivos sem gofmt:"; gofmt -l .; exit 1; }
+      - name: go mod tidy
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
+      - name: go vet
+        run: go vet ./...
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.14.0
+
+  test:
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: go test -race
+        run: go test -race -count=1 -coverprofile=coverage.txt ./...
+      - name: Cobertura mínima (grouping, planner, cache >= 70%)
+        if: matrix.os == 'ubuntu-latest'
+        run: bash scripts/check-coverage.sh 70
+      - name: Resumo de cobertura
+        if: matrix.os == 'ubuntu-latest'
+        run: go tool cover -func=coverage.txt | tail -n 1
+      - uses: actions/upload-artifact@v4
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          name: coverage
+          path: coverage.txt
+          retention-days: 14
+
+  build:
+    name: Build (${{ matrix.goos }}/${{ matrix.goarch }})
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { goos: linux, goarch: amd64 }
+          - { goos: linux, goarch: arm64 }
+          - { goos: darwin, goarch: amd64 }
+          - { goos: darwin, goarch: arm64 }
+          - { goos: windows, goarch: amd64 }
+    env:
+      CGO_ENABLED: "0"
+      GOOS: ${{ matrix.goos }}
+      GOARCH: ${{ matrix.goarch }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # para git describe (versão)
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Compilar
+        run: |
+          ext=""; [ "$GOOS" = "windows" ] && ext=".exe"
+          version="$(git describe --tags --always --dirty)"
+          mkdir -p dist
+          go build -trimpath -ldflags "-s -w -X main.version=${version}" \
+            -o "dist/likedsorter-${GOOS}-${GOARCH}${ext}" ./cmd/likedsorter
+      - uses: actions/upload-artifact@v4
+        with:
+          name: likedsorter-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 30

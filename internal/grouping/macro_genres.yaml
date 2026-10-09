@@ -1,0 +1,48 @@
+# Mapa de gêneros específicos -> famílias (estratégia --by=macro-genre).
+#
+# Como funciona:
+#  - Cada gênero do artista (em minúsculas, ex.: "sertanejo universitario",
+#    "pop rock", "brazilian hip hop") é testado contra TODAS as famílias.
+#  - "contains": a família casa se o gênero CONTÉM qualquer um dos trechos.
+#  - "regex":    expressões regulares (Go/RE2), sem diferenciar maiúsculas.
+#  - Se mais de uma família casar, vence a de MAIOR "priority"; em empate,
+#    a que aparece primeiro neste arquivo.
+#  - Nenhuma casou -> "fallback".
+#
+# Edite à vontade e use:  likedsorter plan --by=macro-genre --macro-map meu.yaml
+fallback: Outros
+families:
+  - name: Gospel
+    priority: 90
+    contains: [gospel, christian, worship, louvor, cristao, cristão, ccm]
+  - name: Sertanejo
+    priority: 90
+    contains: [sertanej, modao, modão, agronejo, "música sertaneja"]
+  - name: Pagode/Samba
+    priority: 85
+    contains: [pagode, samba, roda de samba, partido alto]
+  - name: Funk
+    priority: 80
+    contains: [funk, baile, mandelao, mandelão]
+  - name: Hip Hop
+    priority: 75
+    contains: [hip hop, hip-hop, trap, drill, grime, boom bap]
+    regex: ['(^|[^a-z])rap([^a-z]|$)']
+  - name: Eletrônica
+    priority: 70
+    contains: [electronic, electro house, electro swing, edm, house, techno, trance, dubstep, drum and bass, synthwave, big room, hardstyle, downtempo, eurodance, idm, breakbeat, brazilian bass]
+  - name: Jazz
+    priority: 70
+    contains: [jazz, bebop, big band]
+  - name: Clássica
+    priority: 70
+    contains: [classical, orchestra, baroque, opera, chamber music, symphon, string quartet, early music, neoclassical]
+  - name: MPB
+    priority: 65
+    contains: [mpb, bossa nova, tropicalia, tropicália, musica popular brasileira, choro]
+  - name: Pop
+    priority: 55
+    contains: [pop]
+  - name: Rock
+    priority: 50
+    contains: [rock, metal, punk, grunge, hardcore, emo, indie, alternative, shoegaze, britpop, blues, ska, industrial, psychedelic, stoner]

@@ -1,0 +1,21 @@
+likedsorter | plano (dry-run, nada foi alterado) | estratégia: macro-genre | 2026-10-08 21:30
+
+ESTATÍSTICAS
+  Curtidas no Spotify: 2105 | úteis: 2090 (ignoradas: 3 locais, 2 indisponíveis, 0 sem ID, 10 duplicadas)
+  Playlists: 4 | faixas atribuídas: 2090 | ignoradas por grupo pequeno: 0
+  Faixas sem gênero: 150
+  Tamanho das playlists: 5-9: 1 | 100-499: 2 | 1000+: 1
+  Top artistas: Racionais MC's (40), Djavan (31)
+  Top gêneros: sertanejo (400), pop (300)
+
+PLANO
+AÇÃO             PLAYLIST                DESEJADAS  MANTER  ADICIONAR  REMOVER
+criar            Curtidas • Rock         3          0       3          0
+atualizar        Curtidas • Pop | Dance  5          4       1          1
+manter           Curtidas • Jazz         2          2       0          0
+órfã (intocada)  Curtidas • Forró        -          40      -          -
+
+Resumo: 1 a criar, 1 a atualizar, 1 a manter, 1 órfãs | +4 faixas, -1 faixas (remoção só com --allow-remove)
+
+AVISOS
+  - já existe uma playlist sua chamada "Curtidas • Rock" sem o marcador do likedsorter

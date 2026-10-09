@@ -1,0 +1,27 @@
+{
+  "tracks_checked": 1800,
+  "without_isrc": 4,
+  "groups": [
+    {
+      "isrc": "BRABC2000001",
+      "tracks": [
+        {
+          "id": "t2",
+          "artists": "Legião Urbana",
+          "name": "Eduardo e Mônica",
+          "album": "Dois",
+          "release": "1986",
+          "added_at": "2024-03-02"
+        },
+        {
+          "id": "t1",
+          "artists": "Legião Urbana",
+          "name": "Eduardo e Mônica",
+          "album": "Mais do Mesmo",
+          "release": "1998",
+          "added_at": "2023-05-01"
+        }
+      ]
+    }
+  ]
+}

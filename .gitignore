@@ -1,0 +1,24 @@
+# Binários
+/bin/
+/dist/
+*.exe
+*.test
+*.out
+
+# Segredos e estado local (nunca versionar)
+.env
+.env.*
+!.env.example
+config.local.yaml
+token.json
+*.token
+state/
+backups/
+*.db
+*.sqlite
+
+# Cobertura / IDE
+coverage.txt
+coverage.html
+.idea/
+.vscode/

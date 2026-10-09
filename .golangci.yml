@@ -1,0 +1,46 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  default: standard # errcheck, govet, ineffassign, staticcheck, unused
+  enable:
+    - bodyclose   # corpo de resposta HTTP sempre fechado
+    - errorlint   # errors.Is/As em vez de ==/type assertion
+    - gosec       # problemas de segurança (permissões, aleatoriedade, etc.)
+    - nilerr
+    - noctx       # requisições HTTP sempre com context
+    - unconvert
+  settings:
+    errcheck:
+      exclude-functions:
+        - (io.Closer).Close   # defer x.Close() em leitura é idiomático
+        - fmt.Fprint
+        - fmt.Fprintf
+        - fmt.Fprintln
+    gosec:
+      excludes:
+        - G104 # coberto pelo errcheck
+        - G304 # ler arquivos em caminhos de config/cache/--flag do próprio usuário é a função da CLI
+  exclusions:
+    presets:
+      - comments
+      - std-error-handling
+    rules:
+      # testes podem escrever arquivos temporários com permissões simples e ignorar erros de setup
+      - path: _test\.go
+        linters:
+          - gosec
+          - errcheck
+          - noctx
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/ikauedeveloper/likedsorter

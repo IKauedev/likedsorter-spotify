@@ -1,0 +1,5 @@
+action,name,key,part,parts,existing_id,desired,keep,add,remove,duplicates
+create,Curtidas • Rock,Rock,0,0,,3,0,3,0,0
+update,Curtidas • Pop | Dance,Pop,0,0,pl1,5,4,1,1,0
+keep,Curtidas • Jazz,Jazz,0,0,pl2,2,2,0,0,0
+orphan,Curtidas • Forró,Curtidas • Forró,0,0,pl3,0,40,0,0,0

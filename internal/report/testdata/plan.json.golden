@@ -1,0 +1,131 @@
+{
+  "dry_run": true,
+  "strategy": "macro-genre",
+  "generated_at": "2026-10-08T21:30:00Z",
+  "stats": {
+    "liked": 2105,
+    "usable": 2090,
+    "ignored": {
+      "Fetched": 0,
+      "Local": 3,
+      "Unavailable": 2,
+      "NoID": 0,
+      "Duplicates": 10
+    },
+    "groups": 4,
+    "assigned": 2090,
+    "skipped_small_groups": 0,
+    "no_genre_tracks": 150,
+    "size_distribution": [
+      {
+        "label": "1-4",
+        "playlists": 0
+      },
+      {
+        "label": "5-9",
+        "playlists": 1
+      },
+      {
+        "label": "10-24",
+        "playlists": 0
+      },
+      {
+        "label": "25-49",
+        "playlists": 0
+      },
+      {
+        "label": "50-99",
+        "playlists": 0
+      },
+      {
+        "label": "100-499",
+        "playlists": 2
+      },
+      {
+        "label": "500-999",
+        "playlists": 0
+      },
+      {
+        "label": "1000+",
+        "playlists": 1
+      }
+    ],
+    "top_artists": [
+      {
+        "name": "Racionais MC's",
+        "tracks": 40
+      },
+      {
+        "name": "Djavan",
+        "tracks": 31
+      }
+    ],
+    "top_genres": [
+      {
+        "name": "sertanejo",
+        "tracks": 400
+      },
+      {
+        "name": "pop",
+        "tracks": 300
+      }
+    ],
+    "genres_loaded": true
+  },
+  "totals": {
+    "create": 1,
+    "update": 1,
+    "keep": 1,
+    "orphan": 1,
+    "add": 4,
+    "remove": 1
+  },
+  "playlists": [
+    {
+      "action": "create",
+      "key": "Rock",
+      "name": "Curtidas • Rock",
+      "desired": 3,
+      "keep": 0,
+      "add_count": 3,
+      "remove_count": 0,
+      "duplicates": 0
+    },
+    {
+      "action": "update",
+      "key": "Pop",
+      "name": "Curtidas • Pop | Dance",
+      "existing_id": "pl1",
+      "desired": 5,
+      "keep": 4,
+      "add_count": 1,
+      "remove_count": 1,
+      "duplicates": 0
+    },
+    {
+      "action": "keep",
+      "key": "Jazz",
+      "name": "Curtidas • Jazz",
+      "existing_id": "pl2",
+      "desired": 2,
+      "keep": 2,
+      "add_count": 0,
+      "remove_count": 0,
+      "duplicates": 0
+    },
+    {
+      "action": "orphan",
+      "key": "Curtidas • Forró",
+      "name": "Curtidas • Forró",
+      "existing_id": "pl3",
+      "desired": 0,
+      "keep": 40,
+      "add_count": 0,
+      "remove_count": 0,
+      "duplicates": 0
+    }
+  ],
+  "warnings": [
+    "já existe uma playlist sua chamada \"Curtidas • Rock\" sem o marcador do likedsorter"
+  ]
+}

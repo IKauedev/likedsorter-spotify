@@ -1,0 +1,60 @@
+{
+  "liked": 2105,
+  "usable": 1800,
+  "filter": "gênero~rock, desde 2023-01-01",
+  "ignored": {
+    "Fetched": 0,
+    "Local": 3,
+    "Unavailable": 2,
+    "NoID": 1,
+    "Duplicates": 10
+  },
+  "hours": 123.4,
+  "explicit": 210,
+  "genres_loaded": true,
+  "no_genre_tracks": 150,
+  "by_release_decade": [
+    {
+      "name": "1980s",
+      "tracks": 100
+    },
+    {
+      "name": "1990s",
+      "tracks": 400
+    },
+    {
+      "name": "2010s",
+      "tracks": 900
+    }
+  ],
+  "added_by_year": [
+    {
+      "name": "2022",
+      "tracks": 700
+    },
+    {
+      "name": "2023",
+      "tracks": 1100
+    }
+  ],
+  "top_artists": [
+    {
+      "name": "Legião Urbana",
+      "tracks": 55
+    },
+    {
+      "name": "Djavan",
+      "tracks": 40
+    }
+  ],
+  "top_genres": [
+    {
+      "name": "rock brasileiro",
+      "tracks": 300
+    },
+    {
+      "name": "mpb",
+      "tracks": 250
+    }
+  ]
+}

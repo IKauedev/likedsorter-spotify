@@ -1,0 +1,66 @@
+name: Release
+
+# Publica binários + checksums.txt quando uma tag vX.Y.Z é enviada.
+# O comando `likedsorter update` baixa estes arquivos e confere o SHA-256.
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Publicar release
+    runs-on: ubuntu-latest
+    env:
+      CGO_ENABLED: "0"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Testes
+        run: go test -count=1 ./...
+      - name: Compilar todas as plataformas
+        run: |
+          version="${GITHUB_REF_NAME}"
+          mkdir -p dist
+          for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64; do
+            os="${target%/*}"; arch="${target#*/}"
+            ext=""; [ "$os" = "windows" ] && ext=".exe"
+            GOOS="$os" GOARCH="$arch" go build -trimpath \
+              -ldflags "-s -w -X main.version=${version}" \
+              -o "dist/likedsorter_${os}_${arch}${ext}" ./cmd/likedsorter
+          done
+          (cd dist && sha256sum likedsorter_* > checksums.txt && cat checksums.txt)
+      - name: Manifest do Scoop (instalação com um comando no Windows)
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          base="https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}"
+          h64="$(grep ' likedsorter_windows_amd64.exe$' dist/checksums.txt | cut -d' ' -f1)"
+          harm="$(grep ' likedsorter_windows_arm64.exe$' dist/checksums.txt | cut -d' ' -f1)"
+          cat > dist/likedsorter.json <<EOF
+          {
+            "version": "${version}",
+            "description": "Organiza suas músicas curtidas do Spotify em playlists (CLI)",
+            "homepage": "https://github.com/${GITHUB_REPOSITORY}",
+            "license": "MIT",
+            "architecture": {
+              "64bit": { "url": "${base}/likedsorter_windows_amd64.exe#/likedsorter.exe", "hash": "${h64}" },
+              "arm64": { "url": "${base}/likedsorter_windows_arm64.exe#/likedsorter.exe", "hash": "${harm}" }
+            },
+            "bin": "likedsorter.exe",
+            "checkver": "github"
+          }
+          EOF
+          sed -i 's/^          //' dist/likedsorter.json
+          cat dist/likedsorter.json
+      - name: Criar a release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/* \
+            --title "${GITHUB_REF_NAME}" --generate-notes

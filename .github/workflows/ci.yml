@@ -55,7 +55,7 @@ jobs:
       - name: Resumo de cobertura
         if: matrix.os == 'ubuntu-latest'
         run: go tool cover -func=coverage.txt | tail -n 1
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: matrix.os == 'ubuntu-latest'
         with:
           name: coverage
@@ -93,7 +93,7 @@ jobs:
           mkdir -p dist
           go build -trimpath -ldflags "-s -w -X main.version=${version}" \
             -o "dist/likedsorter-${GOOS}-${GOARCH}${ext}" ./cmd/likedsorter
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: likedsorter-${{ matrix.goos }}-${{ matrix.goarch }}
           path: dist/*

@@ -1,8 +1,8 @@
 module github.com/ikauedeveloper/likedsorter
 
-go 1.22
+go 1.26.0
 
-require golang.org/x/oauth2 v0.24.0
+require golang.org/x/oauth2 v0.37.0
 
 require (
 	golang.org/x/sync v0.10.0
